@@ -11,6 +11,8 @@ void hidecur(){CONSOLE_CURSOR_INFO cursor_info={1,0};SetConsoleCursorInfo(GetStd
 void putnstr(int n, string s){for(int _=1;_<=n;_++)cout << s;}
 void noedit(){HANDLE hStdin=GetStdHandle(STD_INPUT_HANDLE);DWORD mode;GetConsoleMode(hStdin,&mode);mode&=~ENABLE_QUICK_EDIT_MODE;mode&=~ENABLE_INSERT_MODE;mode&=~ENABLE_MOUSE_INPUT;SetConsoleMode(hStdin,mode);}
 void setcolor(int x){SetConsoleTextAttribute(GetStdHandle(4294967285u),x);}
+void noline(){HANDLE h=GetStdHandle(4294967285u);DWORD mode;GetConsoleMode(h, &mode);mode&=~ENABLE_WRAP_AT_EOL_OUTPUT;SetConsoleMode(h, mode);}
+void noresize(){HWND h=GetConsoleWindow();LONG_PTR s=GetWindowLongPtr(h, GWL_STYLE);s&=~(WS_THICKFRAME|WS_MAXIMIZEBOX);SetWindowLongPtr(h, GWL_STYLE, s);SetWindowPos(h, NULL, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOSIZE|SWP_NOZORDER|SWP_FRAMECHANGED);}
 
 struct{
 	wstring s;
@@ -63,7 +65,7 @@ struct{
 
 void putCenter(wstring x, int len, int pos){
 	for(int i=1;i<=(len-x.size())/2;i++){
-		wcout << " ";
+		wcout << L" ";
 	}
 	for(int i=0;i<x.size();i++){
 		if(i<=pos){
@@ -76,9 +78,8 @@ void putCenter(wstring x, int len, int pos){
 		}
 	}
 	for(int i=1;i<=(len-x.size())/2;i++){
-		wcout << " ";
+		wcout << L" ";
 	}
-	wcout << "\n";
 }
 void clearScreen(){
 	gotoxy(0, 0);
@@ -89,18 +90,22 @@ void clearScreen(){
 
 int main(){
 	hidecur();
+	SetWindowPos(GetConsoleWindow(), HWND_TOPMOST, 100, 100, 500, 90, SWP_NOMOVE);
 	noedit();
+	noline();
+	noresize();
 	_setmode(_fileno(stdout), _O_U16TEXT);
-	SetWindowPos(GetConsoleWindow(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOSIZE);
 	for(int i=0;i<54;i++){
 		clearScreen();
 		gotoxy(0, 0);
 		if(i%2==0){
 			putCenter(words[i].s, 50, -1);
+			wcout << L"\n";
 			putCenter(words[i+1].s, 50, -1);
 		}
 		else{
 			putCenter(words[i+1].s, 50, -1);
+			wcout << L"\n";
 			putCenter(words[i].s, 50, -1);
 		}
 
@@ -112,6 +117,7 @@ int main(){
 				clearScreen();
 				gotoxy(0, 0);
 				putCenter(words[i].s, 50, j);
+				wcout << L"\n";
 				putCenter(words[i+1].s, 50, -1);
 				Sleep(280);
 			}
@@ -122,6 +128,7 @@ int main(){
 				clearScreen();
 				gotoxy(0, 0);
 				putCenter(words[i+1].s, 50, -1);
+				wcout << L"\n";
 				putCenter(words[i].s, 50, j);
 				Sleep(280);
 			}
@@ -134,6 +141,7 @@ int main(){
 
 /*
 
-Idea from FJC-2013XH
+Idea from FJC_2013XH
+Made by pbcoding
 
 */
