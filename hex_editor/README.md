@@ -11,3 +11,9 @@
 最大支持 4 GB 文件。
 
 ![hexeditor](https://cdn.jsdelivr.net/gh/pbcoding123/img@main/store/hexeditor.png)
+
+### 编译命令
+
+```batch
+g++ -o hex.exe hex.cpp -O2 -std=c++14 -static-libgcc -lgdi32 -lcomctl32 -lcomdlg32 -municode -mwindows
+```
